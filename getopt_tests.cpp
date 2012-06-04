@@ -38,12 +38,12 @@ TEST(test_getopt_multiple_options_separate_argv)
   assert_equal('b', (char)getopt(count(argv), argv, "ab"));
 }
 
-//TEST(test_getopt_multiple_options_same_argv)
-//{
-//  char* argv[] = {"foo.exe", "-ba"};
-//  assert_equal('b', (char)getopt(count(argv), argv, "ab"));
-//  assert_equal('a', (char)getopt(count(argv), argv, "ab"));
-//}
+TEST(test_getopt_multiple_options_same_argv)
+{
+  char* argv[] = {"foo.exe", "-ba"};
+  assert_equal('b', (char)getopt(count(argv), argv, "ab"));
+  assert_equal('a', (char)getopt(count(argv), argv, "ab"));
+}
 
 TEST(test_getopt_embedded_nonoptions)
 {

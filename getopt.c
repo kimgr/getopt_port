@@ -9,6 +9,8 @@ int optopt;
 int optind = 1; /* The variable optind [...] shall be initialized to 1 by the system */
 int opterr;
 
+static char* curchar = NULL;
+
 /* Implemented based on http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html */
 int getopt(int argc, char* argv[], const char *optstring)
 {
@@ -42,7 +44,10 @@ int getopt(int argc, char* argv[], const char *optstring)
     return -1;
   }
 
-  optchar = argv[optind][1];
+  if (curchar == NULL || *curchar == '\0')
+    curchar = argv[optind] + 1;
+
+  optchar = *curchar;
 
   /*  The getopt() function shall return the next option character (if one is found) from argv
       that matches a character in optstring, if there is one that matches */
@@ -51,7 +56,7 @@ int getopt(int argc, char* argv[], const char *optstring)
   {
     if (optdecl[1] == ':')
     {
-      optarg = &(argv[optind][2]);
+      optarg = ++curchar;
       if (*optarg == '\0')
       {
         if (optind < argc - 1)
@@ -64,6 +69,10 @@ int getopt(int argc, char* argv[], const char *optstring)
           optchar = (optstring[0] == ':') ? ':' : '?';
         }
       }
+      else
+      {
+        curchar = NULL;
+      }
     }
   }
   else
@@ -74,7 +83,9 @@ int getopt(int argc, char* argv[], const char *optstring)
     optchar = '?';
   }
 
-  ++optind;
+  if (curchar == NULL || *++curchar == '\0')
+    ++optind;
+
   return optchar;
 }
 
