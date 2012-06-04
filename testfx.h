@@ -1,8 +1,10 @@
 #ifndef INCLUDED_TESTFX_H
 #define INCLUDED_TESTFX_H
 
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
+#include <string>
 
 typedef void (*testfunction)();
 
@@ -36,6 +38,28 @@ static void check_equal(const T1& expected, const T2& actual, const char* functi
   if (expected != actual)
   {
     std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << expected << ", was " << actual << std::endl;
+    exit(1);
+  }
+}
+
+static std::string format_char(char c)
+{
+  if (isprint(c))
+  {
+    return std::string(1, c);
+  }
+  else
+  {
+    char buf[64] = {0};
+    return std::string(_itoa(c, buf, 10));
+  }
+}
+
+static void check_equal(char expected, char actual, const char* function, const char* expected_expr, const char* actual_expr)
+{
+  if (expected != actual)
+  {
+    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << format_char(expected) << ", was " << format_char(actual) << std::endl;
     exit(1);
   }
 }
