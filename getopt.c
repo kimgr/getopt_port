@@ -5,13 +5,11 @@
 #include <assert.h>
 
 char *optarg;
-int optopt, optind = 1;
-int opterr; // we don't use this
+int optopt;
+int optind = 1; /* The variable optind [...] shall be initialized to 1 by the system */
+int opterr;
 
-static char* nextchar;
-
-// Implemented based on http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html
-// except I never got it to work... :-(
+/* Implemented based on http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html */
 int getopt(int argc, char* argv[], const char *optstring)
 {
   int optchar = -1;
@@ -21,39 +19,39 @@ int getopt(int argc, char* argv[], const char *optstring)
   opterr = 0;
   optopt = 0;
 
+  /* This is not specified, but we need it to avoid overrunning the argv bounds */
   if (optind >= argc)
     return -1;
 
-  if (nextchar && *nextchar)
-    return *(++nextchar);
-
-  nextchar = argv[optind];
-  if (nextchar == NULL)
+  /* If, when getopt() is called argv[optind] is a null pointer, getopt() shall return -1 without changing optind. */
+  if (argv[optind] == NULL)
     return -1;
 
-  if (nextchar[0] != '-')
+  /* If, when getopt() is called *argv[optind]  is not the character '-', getopt() shall return -1 without changing optind. */
+  if (*argv[optind] != '-')
     return -1;
 
-  // If the argv is only a dash, don't touch optind
-  // and return -1
-  if (nextchar[1] == '\0')
+  /* If, when getopt() is called argv[optind] points to the string "-", getopt() shall return -1 without changing optind. */
+  if (strcmp(argv[optind], "-") == 0)
     return -1;
 
-  assert(nextchar[0] == '-');
-
-  if (nextchar[1] == '-') // -- means increase optind and return -1
+  /* If, when getopt() is called argv[optind] points to the string "--", getopt() shall return -1 after incrementing optind. */
+  if (strcmp(argv[optind], "--") == 0)
   {
     ++optind;
     return -1;
   }
 
-  optchar = nextchar[1];
+  optchar = argv[optind][1];
+
+  /*  The getopt() function shall return the next option character (if one is found) from argv
+      that matches a character in optstring, if there is one that matches */
   optdecl = strchr(optstring, optchar);
   if (optdecl)
   {
     if (optdecl[1] == ':')
     {
-      optarg = nextchar + 2;
+      optarg = &(argv[optind][2]);
       if (*optarg == '\0')
       {
         if (optind < argc - 1)
@@ -66,20 +64,17 @@ int getopt(int argc, char* argv[], const char *optstring)
           optchar = (optstring[0] == ':') ? ':' : '?';
         }
       }
-
-      nextchar = NULL;
     }
   }
   else
   {
-    nextchar = NULL;
+    /* If getopt() encounters an option character that is not contained in optstring, it shall return the question-mark ( '?' ) character. */
+    /* [...] getopt() shall set the variable optopt to the option character that caused the error. */
     optopt = optchar;
-    optchar = '?'; // unrecognized option
+    optchar = '?';
   }
 
-  if (*nextchar == '\0')
-    ++optind;
-
+  ++optind;
   return optchar;
 }
 
