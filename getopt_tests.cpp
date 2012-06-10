@@ -31,6 +31,12 @@ TEST(test_getopt_unrecognized)
   assert_equal('?', (char)getopt(count(argv), argv, "cde"));
 }
 
+TEST(test_getopt_only_nonoptions)
+{
+  char* argv[] = {"foo.exe", "alfred"};
+  assert_equal(-1, (char)getopt(count(argv), argv, "a"));
+}
+
 TEST(test_getopt_multiple_options_separate_argv)
 {
   char* argv[] = {"foo.exe", "-a", "-b"};
@@ -54,7 +60,7 @@ TEST(test_getopt_embedded_nonoptions)
   assert_equal(-1, (char)getopt(count(argv), argv, "ab"));
 }
 
-TEST(test_getopt_adjacent_arg)
+TEST(test_getopt_argument_same_argv)
 {
   char* argv[] = {"foo.exe", "-afilename"};
 
@@ -62,7 +68,7 @@ TEST(test_getopt_adjacent_arg)
   assert_equal("filename", optarg);
 }
 
-TEST(test_getopt_nonadjacent_arg)
+TEST(test_getopt_argument_separate_argv)
 {
   char* argv[] = {"foo.exe", "-a", "filename"};
 
