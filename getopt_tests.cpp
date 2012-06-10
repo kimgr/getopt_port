@@ -37,6 +37,13 @@ TEST(test_getopt_only_nonoptions)
   assert_equal(-1, (char)getopt(count(argv), argv, "a"));
 }
 
+TEST(test_getopt_consume_subset)
+{
+  char* argv[] = {"foo.exe", "-f", "-g", "-h"};
+  assert_equal('f', (char)getopt(count(argv), argv, "fgh"));
+  assert_equal('g', (char)getopt(count(argv), argv, "fgh"));
+}
+
 TEST(test_getopt_multiple_options_separate_argv)
 {
   char* argv[] = {"foo.exe", "-a", "-b"};
