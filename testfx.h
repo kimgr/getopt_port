@@ -26,7 +26,7 @@ struct test_registrar
 
 #define TEST(f) \
   void f(); \
-  test_registrar MAKE_NAME(r, __LINE__) (#f, f); \
+  test_registrar MAKE_NAME(MAKE_NAME(r, f), __LINE__) (#f, f); \
   void f()
 
 #define assert_equal(expected, actual) \
@@ -56,6 +56,15 @@ static std::string format_char(char c)
 }
 
 static void check_equal(char expected, char actual, const char* function, const char* expected_expr, const char* actual_expr)
+{
+  if (expected != actual)
+  {
+    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << format_char(expected) << ", was " << format_char(actual) << std::endl;
+    exit(1);
+  }
+}
+
+static void check_equal(char expected, int actual, const char* function, const char* expected_expr, const char* actual_expr)
 {
   if (expected != actual)
   {
