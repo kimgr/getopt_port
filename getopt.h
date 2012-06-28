@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
-const int no_argument = 0;
-const int required_argument = 1;
-const int optional_argument = 2;
+extern const int no_argument;
+extern const int required_argument;
+extern const int optional_argument;
 
 extern char *optarg;
 extern int optind, opterr, optopt;

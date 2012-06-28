@@ -75,6 +75,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="getopt.c" />
+    <ClCompile Include="getopt_long_tests.cpp" />
     <ClCompile Include="getopt_tests.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="testfx.cpp" />
