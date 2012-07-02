@@ -167,8 +167,7 @@ int getopt_long(int argc, char * argv[],
 
     if (optarg == NULL && optind < argc - 1)
     {
-      ++optind;
-      optarg = argv[optind];
+      optarg = argv[++optind];
     }
   }
 
