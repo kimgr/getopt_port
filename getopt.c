@@ -64,25 +64,36 @@ int getopt(int argc, char* argv[], const char *optstring)
       optarg = ++optcursor;
       if (*optarg == '\0')
       {
-        /* If the option was the last character in the string pointed to by an element of argv, 
-            then optarg shall contain the next element of argv, and optind shall be incremented 
-            by 2. If the resulting value of optind is greater than argc, this indicates a missing 
-            option-argument, and getopt() shall return an error indication.
-
-            Otherwise, optarg shall point to the string following the option character in that 
-            element of argv, and optind shall be incremented by 1.
-        */
-        if (optind < argc - 1)
+        /* GNU extension: Two colons mean an option takes an
+           optional arg; if there is text in the current argv-element (i.e., in the same
+           word as the option name itself, for example, "-oarg"), then it is returned in
+           optarg, otherwise optarg is set to zero. */
+        if (optdecl[2] != ':')
         {
-          optarg = argv[++optind];
-          optcursor = optarg + 1;
+          /* If the option was the last character in the string pointed to by an element of argv, 
+              then optarg shall contain the next element of argv, and optind shall be incremented 
+              by 2. If the resulting value of optind is greater than argc, this indicates a missing 
+              option-argument, and getopt() shall return an error indication.
+
+              Otherwise, optarg shall point to the string following the option character in that 
+              element of argv, and optind shall be incremented by 1.
+          */
+          if (optind < argc - 1)
+          {
+            optarg = argv[++optind];
+            optcursor = NULL;
+          }
+          else
+          {
+            /* If it detects a missing option-argument, it shall return the colon character ( ':' ) if the first character of optstring was a colon, or a question-mark character ( '?' ) otherwise. */
+            /* [...] getopt() shall set the variable optopt to the option character that caused the error. */
+            optopt = optchar;
+            optchar = (optstring[0] == ':') ? ':' : '?';
+          }
         }
         else
         {
-          /* If it detects a missing option-argument, it shall return the colon character ( ':' ) if the first character of optstring was a colon, or a question-mark character ( '?' ) otherwise. */
-          /* [...] getopt() shall set the variable optopt to the option character that caused the error. */
-          optopt = optchar;
-          optchar = (optstring[0] == ':') ? ':' : '?';
+          optarg = NULL;
         }
       }
       else

@@ -82,3 +82,19 @@ TEST(test_getopt_argument_separate_argv)
   assert_equal('a', (char)getopt(count(argv), argv, "a:"));
   assert_equal("filename", optarg);
 }
+
+TEST(test_getopt_optional_argument)
+{
+  char* argv[] = {"foo.exe", "-afilename"};
+
+  assert_equal('a', (char)getopt(count(argv), argv, "a::"));
+  assert_equal("filename", optarg);
+}
+
+TEST(test_getopt_missing_optional_argument)
+{
+  char* argv[] = {"foo.exe", "-a"};
+
+  assert_equal('a', (char)getopt(count(argv), argv, "a::"));
+  assert_equal((char*)NULL, optarg);
+}
