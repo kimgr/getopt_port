@@ -15,7 +15,9 @@ int opterr;
 
 static char* optcursor = NULL;
 
-/* Implemented based on http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html */
+/* Implemented based on http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html
+   and http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html for optional arguments. 
+   Other GNU extensions are purely accidental. */
 int getopt(int argc, char* argv[], const char *optstring)
 {
   int optchar = -1;
@@ -118,14 +120,6 @@ int getopt(int argc, char* argv[], const char *optstring)
 no_more_optchars:
   optcursor = NULL;
   return -1;
-}
-
-static const char* get_arg_end(const char* argument)
-{
-  while (*argument != '\0' && *argument != '=')
-    ++argument;
-
-  return argument;
 }
 
 int getopt_long(int argc, char * argv[], 
