@@ -27,25 +27,25 @@ int getopt(int argc, char* argv[], const char *optstring)
 
   /* Unspecified, but we need it to avoid overrunning the argv bounds */
   if (optind >= argc)
-    goto no_more_args;
+    goto no_more_optchars;
 
   /* If, when getopt() is called argv[optind] is a null pointer, getopt() shall return -1 without changing optind. */
   if (argv[optind] == NULL)
-    goto no_more_args;
+    goto no_more_optchars;
 
   /* If, when getopt() is called *argv[optind]  is not the character '-', getopt() shall return -1 without changing optind. */
   if (*argv[optind] != '-')
-    goto no_more_args;
+    goto no_more_optchars;
 
   /* If, when getopt() is called argv[optind] points to the string "-", getopt() shall return -1 without changing optind. */
   if (strcmp(argv[optind], "-") == 0)
-    goto no_more_args;
+    goto no_more_optchars;
 
   /* If, when getopt() is called argv[optind] points to the string "--", getopt() shall return -1 after incrementing optind. */
   if (strcmp(argv[optind], "--") == 0)
   {
     ++optind;
-    goto no_more_args;
+    goto no_more_optchars;
   }
 
   if (optcursor == NULL || *optcursor == '\0')
@@ -115,7 +115,7 @@ int getopt(int argc, char* argv[], const char *optstring)
 
   return optchar;
 
-no_more_args:
+no_more_optchars:
   optcursor = NULL;
   return -1;
 }
