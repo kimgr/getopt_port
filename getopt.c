@@ -21,8 +21,7 @@ static char* optcursor = NULL;
    [1] http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html
    [2] http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html
    */
-int getopt(int argc, char* const argv[], const char* optstring)
-{
+int getopt(int argc, char* const argv[], const char* optstring) {
   int optchar = -1;
   const char* optdecl = NULL;
 
@@ -51,8 +50,7 @@ int getopt(int argc, char* const argv[], const char* optstring)
 
   /* If, when getopt() is called argv[optind] points to the string "--", 
      getopt() shall return -1 after incrementing optind. */
-  if (strcmp(argv[optind], "--") == 0)
-  {
+  if (strcmp(argv[optind], "--") == 0) {
     ++optind;
     goto no_more_optchars;
   }
@@ -66,22 +64,18 @@ int getopt(int argc, char* const argv[], const char* optstring)
      found) from argv that matches a character in optstring, if there is 
      one that matches. */
   optdecl = strchr(optstring, optchar);
-  if (optdecl)
-  {
+  if (optdecl) {
     /* [I]f a character is followed by a colon, the option takes an
        argument. */
-    if (optdecl[1] == ':')
-    {
+    if (optdecl[1] == ':') {
       optarg = ++optcursor;
-      if (*optarg == '\0')
-      {
+      if (*optarg == '\0') {
         /* GNU extension: Two colons mean an option takes an
            optional arg; if there is text in the current argv-element 
            (i.e., in the same word as the option name itself, for example, 
            "-oarg"), then it is returned in optarg, otherwise optarg is set
            to zero. */
-        if (optdecl[2] != ':')
-        {
+        if (optdecl[2] != ':') {
           /* If the option was the last character in the string pointed to by
              an element of argv, then optarg shall contain the next element
              of argv, and optind shall be incremented by 2. If the resulting
@@ -92,13 +86,10 @@ int getopt(int argc, char* const argv[], const char* optstring)
              option character in that element of argv, and optind shall be
              incremented by 1.
           */
-          if (optind < argc - 1)
-          {
+          if (optind < argc - 1) {
             optarg = argv[++optind];
             optcursor = NULL;
-          }
-          else
-          {
+          } else {
             /* If it detects a missing option-argument, it shall return the 
                colon character ( ':' ) if the first character of optstring
                was a colon, or a question-mark character ( '?' ) otherwise.
@@ -109,20 +100,14 @@ int getopt(int argc, char* const argv[], const char* optstring)
             optopt = optchar;
             optchar = (optstring[0] == ':') ? ':' : '?';
           }
-        }
-        else
-        {
+        } else {
           optarg = NULL;
         }
-      }
-      else
-      {
+      } else {
         optcursor = NULL;
       }
     }
-  }
-  else
-  {
+  } else {
     /* If getopt() encounters an option character that is not contained in 
        optstring, it shall return the question-mark ( '?' ) character. */
 
@@ -142,10 +127,8 @@ no_more_optchars:
   return -1;
 }
 
-int getopt_long(int argc, char* const argv[], 
-      const char* optstring, const struct option* longopts, 
-      int* longindex)
-{
+int getopt_long(int argc, char* const argv[], const char* optstring, 
+  const struct option* longopts, int* longindex) {
   const struct option* o = longopts;
   const struct option* match = NULL;
   int num_matches = 0;
@@ -161,10 +144,8 @@ int getopt_long(int argc, char* const argv[],
   /* It's an option; starts with -- and is longer than two chars. */
   current_argument = argv[optind] + 2;
   argument_name_length = strcspn(current_argument, "=");
-  for (; o->name; ++o)
-  {
-    if (strncmp(o->name, current_argument, argument_name_length) == 0)
-    {
+  for (; o->name; ++o) {
+    if (strncmp(o->name, current_argument, argument_name_length) == 0) {
       match = o;
       ++num_matches;
     }
@@ -186,14 +167,12 @@ int getopt_long(int argc, char* const argv[],
   if (match->flag)
     *(match->flag) = match->val;
 
-  if (match->has_arg != no_argument)
-  {
+  if (match->has_arg != no_argument) {
     optarg = strchr(argv[optind], '=');
     if (optarg != NULL)
       ++optarg;
 
-    if (optarg == NULL && optind < argc - 1)
-    {
+    if (optarg == NULL && optind < argc - 1) {
       optarg = argv[++optind];
     }
   }
