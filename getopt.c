@@ -7,7 +7,7 @@ const int no_argument = 0;
 const int required_argument = 1;
 const int optional_argument = 2;
 
-char *optarg;
+char* optarg;
 int optopt;
 int optind = 1; /* The variable optind [...] shall be initialized to 1 by the system */
 int opterr;
@@ -17,7 +17,7 @@ static char* optcursor = NULL;
 /* Implemented based on http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html
    and http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html for optional arguments. 
    Other GNU extensions are purely accidental. */
-int getopt(int argc, char* argv[], const char *optstring)
+int getopt(int argc, char* const argv[], const char* optstring)
 {
   int optchar = -1;
   const char* optdecl = NULL;
@@ -121,9 +121,9 @@ no_more_optchars:
   return -1;
 }
 
-int getopt_long(int argc, char * argv[], 
-      const char *optstring, const struct option *longopts, 
-      int *longindex)
+int getopt_long(int argc, char* const argv[], 
+      const char* optstring, const struct option* longopts, 
+      int* longindex)
 {
   const struct option* o = longopts;
   const struct option* match = NULL;
