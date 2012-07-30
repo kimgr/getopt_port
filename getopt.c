@@ -9,7 +9,7 @@ const int optional_argument = 2;
 
 char* optarg;
 int optopt;
-/* The variable optind [...] shall be initialized to 1 by the system */
+/* The variable optind [...] shall be initialized to 1 by the system. */
 int optind = 1;
 int opterr;
 
@@ -30,7 +30,7 @@ int getopt(int argc, char* const argv[], const char* optstring)
   opterr = 0;
   optopt = 0;
 
-  /* Unspecified, but we need it to avoid overrunning the argv bounds */
+  /* Unspecified, but we need it to avoid overrunning the argv bounds. */
   if (optind >= argc)
     goto no_more_optchars;
 
@@ -64,12 +64,12 @@ int getopt(int argc, char* const argv[], const char* optstring)
 
   /* The getopt() function shall return the next option character (if one is 
      found) from argv that matches a character in optstring, if there is 
-     one that matches */
+     one that matches. */
   optdecl = strchr(optstring, optchar);
   if (optdecl)
   {
     /* [I]f a character is followed by a colon, the option takes an
-       argument */
+       argument. */
     if (optdecl[1] == ':')
     {
       optarg = ++optcursor;
@@ -158,7 +158,7 @@ int getopt_long(int argc, char* const argv[],
   if (strlen(argv[optind]) < 3 || strncmp(argv[optind], "--", 2) != 0)
     return getopt(argc, argv, optstring);
 
-  /* It's an option; starts with -- and is longer than 2 chars */
+  /* It's an option; starts with -- and is longer than two chars. */
   current_argument = argv[optind] + 2;
   argument_name_length = strcspn(current_argument, "=");
   for (; o->name; ++o)
@@ -170,12 +170,12 @@ int getopt_long(int argc, char* const argv[],
     }
   }
 
-  /* Unknown option or ambiguous match */
+  /* Unknown option or ambiguous match. */
   if (num_matches != 1)
     return '?';
 
   /* If longindex is not NULL, it points to a variable which is set to the
-     index of the long option relative to longopts */
+     index of the long option relative to longopts. */
   if (longindex)
     *longindex = (match - longopts);
 
