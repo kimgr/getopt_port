@@ -98,10 +98,6 @@ int getopt(int argc, char* const argv[], const char* optstring) {
                colon character ( ':' ) if the first character of optstring
                was a colon, or a question-mark character ( '?' ) otherwise.
             */
-
-            /* [...] getopt() shall set the variable optopt to the option 
-               character that caused the error. */
-            optopt = optchar;
             optchar = (optstring[0] == ':') ? ':' : '?';
           }
         } else {
@@ -114,10 +110,6 @@ int getopt(int argc, char* const argv[], const char* optstring) {
   } else {
     /* If getopt() encounters an option character that is not contained in 
        optstring, it shall return the question-mark ( '?' ) character. */
-
-    /* [...] getopt() shall set the variable optopt to the option character 
-       that caused the error. */
-    optopt = optchar;
     optchar = '?';
   }
 
