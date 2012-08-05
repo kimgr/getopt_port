@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E95251F5-975F-44BA-BDCE-C4E8678F888A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>win32_getopt_long</RootNamespace>
+    <RootNamespace>getopt_port</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

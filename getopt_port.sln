@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win32_getopt_long", "win32_getopt_long.vcxproj", "{E95251F5-975F-44BA-BDCE-C4E8678F888A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "getopt_port", "getopt_port.vcxproj", "{E95251F5-975F-44BA-BDCE-C4E8678F888A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
