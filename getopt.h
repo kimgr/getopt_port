@@ -1,5 +1,5 @@
-#ifndef INCLUDED_WIN32_GETOPT_H
-#define INCLUDED_WIN32_GETOPT_H
+#ifndef INCLUDED_GETOPT_PORT_H
+#define INCLUDED_GETOPT_PORT_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -28,4 +28,4 @@ int getopt_long(int argc, char* const argv[],
 }
 #endif
 
-#endif // INCLUDED_WIN32_GETOPT_LONG
+#endif // INCLUDED_GETOPT_PORT_H
