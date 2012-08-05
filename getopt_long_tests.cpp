@@ -234,3 +234,21 @@ TEST_F(getopt_fixture, test_getopt_long_empty_optional_argument) {
   assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
   assert_equal("", optarg);
 }
+
+TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
+  // First use getopt() to put something into optarg.
+  char* argv[] = {"foo.exe", "-avalue"};
+  assert_equal('a', getopt(count(argv), argv, "a:"));
+  assert_equal("value", optarg);
+
+  // Then make sure that getopt_long() doesn't get that value out
+  // when a non-option is processed
+  option opts[] = {
+    {"arg", optional_argument, NULL, 'a'},
+    null_opt
+  };
+
+  char* long_argv[] = {"foo.exe", "this"};
+  assert_equal(-1, getopt_long(count(long_argv), long_argv, "", opts, NULL));
+  assert_equal((char*)NULL, optarg);
+}

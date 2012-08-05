@@ -136,6 +136,8 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
   size_t argument_name_length = 0;
   const char* current_argument = NULL;
 
+  optarg = NULL;
+
   if (optind >= argc)
     return -1;
 
