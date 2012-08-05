@@ -67,6 +67,8 @@ TEST_F(getopt_fixture, test_getopt_missing_required_argument) {
 
   assert_equal('?', getopt(count(argv), argv, "a:"));
   assert_equal('a', optopt);
+  assert_equal((char*)NULL, optarg);
+  assert_equal(3, optind);
 }
 
 TEST_F(getopt_fixture, test_getopt_missing_required_argument_colon) {
@@ -74,6 +76,8 @@ TEST_F(getopt_fixture, test_getopt_missing_required_argument_colon) {
 
   assert_equal(':', getopt(count(argv), argv, ":a:"));
   assert_equal('a', optopt);
+  assert_equal((char*)NULL, optarg);
+  assert_equal(3, optind);
 }
 
 TEST_F(getopt_fixture, test_getopt_optional_argument) {

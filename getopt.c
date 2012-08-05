@@ -15,12 +15,16 @@ int opterr;
 
 static char* optcursor = NULL;
 
-/* Implemented based on [1] and [2] for optional arguments. 
-   Other GNU extensions are purely accidental. 
+/* Implemented based on [1] and [2] for optional arguments.
+   optopt is handled FreeBSD-style, per [3].
+   Other GNU and FreeBSD extensions are purely accidental. 
    
-   [1] http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html
-   [2] http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html
-   */
+ [1] http://pubs.opengroup.org/onlinepubs/000095399/functions/getopt.html
+ [2] http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html
+ [3] http://www.freebsd.org/cgi/man.cgi?query=getopt&sektion=3&manpath=
+      FreeBSD+9.0-RELEASE
+
+*/
 int getopt(int argc, char* const argv[], const char* optstring) {
   int optchar = -1;
   const char* optdecl = NULL;
@@ -90,14 +94,15 @@ int getopt(int argc, char* const argv[], const char* optstring) {
              option character in that element of argv, and optind shall be
              incremented by 1.
           */
-          if (optind < argc - 1) {
-            optarg = argv[++optind];
+          if (++optind < argc) {
+            optarg = argv[optind];
             optcursor = NULL;
           } else {
             /* If it detects a missing option-argument, it shall return the 
                colon character ( ':' ) if the first character of optstring
                was a colon, or a question-mark character ( '?' ) otherwise.
             */
+            optarg = NULL;
             optchar = (optstring[0] == ':') ? ':' : '?';
           }
         } else {
