@@ -21,19 +21,21 @@ struct test_registrar {
 #define MAKE_NAME(prefix, unique) PASTE(prefix, unique)
 
 #define TEST(func) \
-  void func(); \
+  static void func(); \
   test_registrar MAKE_NAME(MAKE_NAME(r, func), __LINE__) (#func, func); \
-  void func()
+  \
+  static void func()
 
 #define TEST_F(fixture, func) \
-  void func##_with_fixture(fixture& f); \
-  void func(); \
+  static void func##_with_fixture(fixture& f); \
+  static void func(); \
   test_registrar MAKE_NAME(MAKE_NAME(r, func), __LINE__) (#func, func); \
-  void func() { \
+  \
+  static void func() { \
     fixture f; \
     func##_with_fixture(f); \
   } \
-  void func##_with_fixture(fixture& f) \
+  static void func##_with_fixture(fixture& f) \
 
 // Assertions
 #define assert_equal(expected, actual) \
