@@ -96,7 +96,6 @@ int getopt(int argc, char* const argv[], const char* optstring) {
           */
           if (++optind < argc) {
             optarg = argv[optind];
-            optcursor = NULL;
           } else {
             /* If it detects a missing option-argument, it shall return the 
                colon character ( ':' ) if the first character of optstring
@@ -108,9 +107,9 @@ int getopt(int argc, char* const argv[], const char* optstring) {
         } else {
           optarg = NULL;
         }
-      } else {
-        optcursor = NULL;
       }
+      
+      optcursor = NULL;
     }
   } else {
     /* If getopt() encounters an option character that is not contained in 
