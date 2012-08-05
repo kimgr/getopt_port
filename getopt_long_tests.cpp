@@ -12,7 +12,7 @@ TEST_F(getopt_fixture, test_getopt_long_empty) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_only_nonoptions) {
-  char* argv[] = {"foo.exe", "alfred"};
+  char* argv[] = {"foo.exe", "nonoption"};
   option opts[] = {null_opt};
 
   assert_equal(-1, (char)getopt_long(count(argv), argv, "a", opts, NULL));
@@ -140,7 +140,7 @@ TEST_F(getopt_fixture, test_getopt_long_unknown) {
 }
 
 TEST_F(getopt_fixture, test_getopt_long_required_argument_same_argv) {
-  char* argv[] = {"foo.exe", "--arg=param"};
+  char* argv[] = {"foo.exe", "--arg=value"};
 
   option opts[] = {
     {"arg", required_argument, NULL, 'a'},
@@ -148,7 +148,7 @@ TEST_F(getopt_fixture, test_getopt_long_required_argument_same_argv) {
   };
 
   assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
-  assert_equal("param", optarg);
+  assert_equal("value", optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_required_argument_separate_argv) {
@@ -172,11 +172,11 @@ TEST_F(getopt_fixture, test_getopt_long_missing_required_argument) {
   };
 
   assert_equal(':', getopt_long(count(argv), argv, "", opts, NULL));
-  assert_equal(NULL, (int)optarg);
+  assert_equal((char*)NULL, optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_optional_argument_same_argv) {
-  char* argv[] = {"foo.exe", "--arg=param"};
+  char* argv[] = {"foo.exe", "--arg=value"};
 
   option opts[] = {
     {"arg", optional_argument, NULL, 'a'},
@@ -184,7 +184,7 @@ TEST_F(getopt_fixture, test_getopt_long_optional_argument_same_argv) {
   };
 
   assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
-  assert_equal("param", optarg);
+  assert_equal("value", optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_optional_argument_separate_argv) {
@@ -208,7 +208,7 @@ TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument) {
   };
 
   assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
-  assert_equal(NULL, (int)optarg);
+  assert_equal((char*)NULL, optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_empty_required_argument) {
