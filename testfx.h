@@ -41,6 +41,13 @@ struct test_registrar {
 #define assert_equal(expected, actual) \
   check_equal(expected, actual, __FUNCTION__, #expected, #actual)
 
+static std::string printable(const char* s) {
+  if (s == NULL)
+    s = "NULL";
+
+  return std::string(s);
+}
+
 template< class T1, class T2 >
 static void check_equal(const T1& expected, const T2& actual, const char* function, const char* expected_expr, const char* actual_expr) {
   if (expected != actual) {
@@ -77,7 +84,7 @@ static void check_equal(const char* expected, const char* actual, const char* fu
     return;
 
   if (expected == NULL || actual == NULL) {
-    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << expected << ", was " << actual << std::endl;
+    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << printable(expected) << ", was " << printable(actual) << std::endl;
     exit(1);
   }
 
@@ -89,6 +96,10 @@ static void check_equal(const char* expected, const char* actual, const char* fu
 
 static void check_equal(const char* expected, char* actual, const char* function, const char* expected_expr, const char* actual_expr) {
   check_equal(expected, (const char*)actual, function, expected_expr, actual_expr);
+}
+
+static void check_equal(char* expected, char* actual, const char* function, const char* expected_expr, const char* actual_expr) {
+  check_equal((const char*)expected, (const char*)actual, function, expected_expr, actual_expr);
 }
 
 #endif // INCLUDED_TESTFX_H
