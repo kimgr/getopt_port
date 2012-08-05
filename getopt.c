@@ -128,6 +128,10 @@ no_more_optchars:
   return -1;
 }
 
+/* Implementation based on [1].
+
+  [1] http://www.kernel.org/doc/man-pages/online/pages/man3/getopt.3.html
+*/
 int getopt_long(int argc, char* const argv[], const char* optstring, 
   const struct option* longopts, int* longindex) {
   const struct option* o = longopts;
@@ -155,8 +159,10 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
   }
 
   /* Unknown option or ambiguous match. */
-  if (num_matches != 1)
+  if (num_matches != 1) {
+    ++optind;
     return '?';
+  }
 
   /* If longindex is not NULL, it points to a variable which is set to the
      index of the long option relative to longopts. */

@@ -137,6 +137,7 @@ TEST_F(getopt_fixture, test_getopt_long_unknown) {
   };
 
   assert_equal('?', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal(2, optind); // optind should be incremented
 }
 
 TEST_F(getopt_fixture, test_getopt_long_required_argument_same_argv) {
