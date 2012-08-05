@@ -174,6 +174,8 @@ TEST_F(getopt_fixture, test_getopt_long_missing_required_argument) {
 
   assert_equal(':', getopt_long(count(argv), argv, "", opts, NULL));
   assert_equal((char*)NULL, optarg);
+  assert_equal(3, optind);  // optind should be incremented past argc looking
+                            // for args
 }
 
 TEST_F(getopt_fixture, test_getopt_long_optional_argument_same_argv) {

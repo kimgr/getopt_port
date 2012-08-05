@@ -138,6 +138,7 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
   int num_matches = 0;
   size_t argument_name_length = 0;
   const char* current_argument = NULL;
+  int retval = -1;
 
   optarg = NULL;
 
@@ -157,37 +158,38 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
     }
   }
 
-  /* Unknown option or ambiguous match. */
-  if (num_matches != 1) {
-    ++optind;
-    return '?';
-  }
+  if (num_matches == 1) {
+    /* If longindex is not NULL, it points to a variable which is set to the
+       index of the long option relative to longopts. */
+    if (longindex)
+      *longindex = (match - longopts);
 
-  /* If longindex is not NULL, it points to a variable which is set to the
-     index of the long option relative to longopts. */
-  if (longindex)
-    *longindex = (match - longopts);
+    /* If flag is NULL, then getopt_long() shall return val. 
+       Otherwise, getopt_long() returns 0, and flag shall point to a variable
+       which shall be set to val if the option is found, but left unchanged if
+       the option is not found. */
+    if (match->flag)
+      *(match->flag) = match->val;
 
-  /* If flag is NULL, then getopt_long() shall return val. 
-     Otherwise, getopt_long() returns 0, and flag shall point to a variable
-     which shall be set to val if the option is found, but left unchanged if
-     the option is not found. */
-  if (match->flag)
-    *(match->flag) = match->val;
+    retval = match->flag ? 0 : match->val;
 
-  if (match->has_arg != no_argument) {
-    optarg = strchr(argv[optind], '=');
-    if (optarg != NULL)
-      ++optarg;
+    if (match->has_arg != no_argument) {
+      optarg = strchr(argv[optind], '=');
+      if (optarg != NULL)
+        ++optarg;
 
-    if (optarg == NULL && optind < argc - 1) {
-      optarg = argv[++optind];
+      if (optarg == NULL && ++optind < argc) {
+        optarg = argv[optind];
+      }
+
+      if (match->has_arg == required_argument && optarg == NULL)
+        retval = ':';
     }
+  } else {
+    /* Unknown option or ambiguous match. */
+    retval = '?';
   }
-
-  if (match->has_arg == required_argument && optarg == NULL)
-    return ':';
 
   ++optind;
-  return match->flag ? 0 : match->val;
+  return retval;
 }
