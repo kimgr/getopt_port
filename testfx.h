@@ -27,15 +27,15 @@ struct test_registrar {
   static void func()
 
 #define TEST_F(fixture, func) \
-  static void func##_with_fixture(fixture& f); \
-  static void func(); \
-  test_registrar MAKE_NAME(MAKE_NAME(r, func), __LINE__) (#func, func); \
+  static void func##bootstrap(); \
+  static void func(fixture& f); \
+  test_registrar MAKE_NAME(MAKE_NAME(r, func), __LINE__) (#func, func##bootstrap); \
   \
-  static void func() { \
+  static void func##bootstrap() { \
     fixture f; \
-    func##_with_fixture(f); \
+    func(f); \
   } \
-  static void func##_with_fixture(fixture& f) \
+  static void func(fixture& f) \
 
 // Assertions
 #define assert_equal(expected, actual) \
