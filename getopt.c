@@ -108,7 +108,7 @@ int getopt(int argc, char* const argv[], const char* optstring) {
           optarg = NULL;
         }
       }
-      
+
       optcursor = NULL;
     }
   } else {
