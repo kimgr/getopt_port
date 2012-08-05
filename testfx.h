@@ -3,15 +3,13 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <vector>
 #include <string>
 
+// Test registration
 typedef void (*testfunction)();
 
-typedef std::vector<std::pair< const char*, testfunction> > test_vector;
-
-const test_vector& tests();
 void register_test(const char* name, testfunction f);
+int run_tests();
 
 struct test_registrar {
   test_registrar(const char* name, testfunction f) {
@@ -22,11 +20,22 @@ struct test_registrar {
 #define PASTE(prefix, unique) prefix ## unique
 #define MAKE_NAME(prefix, unique) PASTE(prefix, unique)
 
-#define TEST(f) \
-  void f(); \
-  test_registrar MAKE_NAME(MAKE_NAME(r, f), __LINE__) (#f, f); \
-  void f()
+#define TEST(func) \
+  void func(); \
+  test_registrar MAKE_NAME(MAKE_NAME(r, func), __LINE__) (#func, func); \
+  void func()
 
+#define TEST_F(fixture, func) \
+  void func##_with_fixture(fixture& f); \
+  void func(); \
+  test_registrar MAKE_NAME(MAKE_NAME(r, func), __LINE__) (#func, func); \
+  void func() { \
+    fixture f; \
+    func##_with_fixture(f); \
+  } \
+  void func##_with_fixture(fixture& f) \
+
+// Assertions
 #define assert_equal(expected, actual) \
   check_equal(expected, actual, __FUNCTION__, #expected, #actual)
 
@@ -80,4 +89,4 @@ static void check_equal(const char* expected, char* actual, const char* function
   check_equal(expected, (const char*)actual, function, expected_expr, actual_expr);
 }
 
-#endif 
+#endif // INCLUDED_TESTFX_H
