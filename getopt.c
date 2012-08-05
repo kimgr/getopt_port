@@ -60,6 +60,10 @@ int getopt(int argc, char* const argv[], const char* optstring) {
 
   optchar = *optcursor;
 
+  /* FreeBSD: The variable optopt saves the last known option character 
+     returned by getopt() */
+  optopt = optchar;
+
   /* The getopt() function shall return the next option character (if one is 
      found) from argv that matches a character in optstring, if there is 
      one that matches. */

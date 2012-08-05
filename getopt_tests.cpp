@@ -62,6 +62,20 @@ TEST_F(getopt_fixture, test_getopt_argument_separate_argv) {
   assert_equal("argument", optarg);
 }
 
+TEST_F(getopt_fixture, test_getopt_missing_required_argument) {
+  char* argv[] = {"foo.exe", "-a"};
+
+  assert_equal('?', getopt(count(argv), argv, "a:"));
+  assert_equal('a', optopt);
+}
+
+TEST_F(getopt_fixture, test_getopt_missing_required_argument_colon) {
+  char* argv[] = {"foo.exe", "-a"};
+
+  assert_equal(':', getopt(count(argv), argv, ":a:"));
+  assert_equal('a', optopt);
+}
+
 TEST_F(getopt_fixture, test_getopt_optional_argument) {
   char* argv[] = {"foo.exe", "-aargument"};
 
@@ -74,4 +88,14 @@ TEST_F(getopt_fixture, test_getopt_missing_optional_argument) {
 
   assert_equal('a', getopt(count(argv), argv, "a::"));
   assert_equal((char*)NULL, optarg);
+}
+
+TEST_F(getopt_fixture, test_getopt_optopt) {
+  char* argv[] = {"foo.exe", "-a", "-b"};
+
+  getopt(count(argv), argv, "a");
+  assert_equal('a', optopt);
+
+  assert_equal('?', getopt(count(argv), argv, "a"));
+  assert_equal('b', optopt);
 }
