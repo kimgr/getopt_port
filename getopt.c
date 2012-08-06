@@ -176,12 +176,20 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
       if (optarg != NULL)
         ++optarg;
 
+      /* GNU impl does not scan to the next argv, but BSD does. */
       if (optarg == NULL && ++optind < argc) {
         optarg = argv[optind];
       }
 
       if (match->has_arg == required_argument && optarg == NULL)
         retval = ':';
+
+    } else if (strchr(argv[optind], '=')) {
+      /* An argument was provided to a non-argument option. 
+         I haven't seen this specified explicitly, but both GNU and BSD-based
+         implementations show this behavior.
+      */
+      retval = '?';
     }
   } else {
     /* Unknown option or ambiguous match. */

@@ -178,6 +178,29 @@ TEST_F(getopt_fixture, test_getopt_long_missing_required_argument) {
                             // for args
 }
 
+TEST_F(getopt_fixture, test_getopt_long_extraneous_argument) {
+  option opts[] = {
+    {"arg", no_argument, NULL, 'a'},
+    null_opt
+  };
+
+  char* argv[] = {"foo.exe", "--arg=bar"};
+  assert_equal('?', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal((char*)NULL, optarg);
+}
+
+TEST_F(getopt_fixture, test_getopt_long_empty_required_argument) {
+  char* argv[] = {"foo.exe", "--arg="};
+
+  option opts[] = {
+    {"arg", required_argument, NULL, 'a'},
+    null_opt
+  };
+
+  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal("", optarg);
+}
+
 TEST_F(getopt_fixture, test_getopt_long_optional_argument_same_argv) {
   char* argv[] = {"foo.exe", "--arg=value"};
 
@@ -212,18 +235,6 @@ TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument) {
 
   assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
   assert_equal((char*)NULL, optarg);
-}
-
-TEST_F(getopt_fixture, test_getopt_long_empty_required_argument) {
-  char* argv[] = {"foo.exe", "--arg="};
-
-  option opts[] = {
-    {"arg", required_argument, NULL, 'a'},
-    null_opt
-  };
-
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
-  assert_equal("", optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_empty_optional_argument) {
