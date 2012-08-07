@@ -4,6 +4,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
+#include <stdexcept>
+#include <stdio.h>
+#include <sstream>
 
 // Test registration
 typedef void (*testfunction)();
@@ -38,6 +41,12 @@ struct test_registrar {
   static void func(fixture& f) \
 
 // Assertions
+struct assertion_failure : std::runtime_error {
+  explicit assertion_failure(const char* message)
+    : std::runtime_error(message) {
+  }
+};
+
 #define assert_equal(expected, actual) \
   check_equal(expected, actual, __FUNCTION__, #expected, #actual)
 
@@ -53,31 +62,40 @@ static std::string printable(char c) {
     return "\'" + std::string(1, c) + "\'";
   } else {
     char buf[64] = {0};
-    return std::string(_itoa(c, buf, 10));
+    sprintf(buf, "%d", c);
+    return std::string(buf);
   }
+}
+
+template< class T1, class T2 >
+static std::string build_message(const char* function, const char* expected_expr, const char* actual_expr, const T1& expected, const T2& actual) {
+  std::ostringstream builder;
+  builder << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << expected << ", was " << actual;
+
+  return builder.str();
+}
+
+static std::string build_message(const char* function, const char* expected_expr, const char* actual_expr, const char* expected, const char* actual) {
+  return build_message(function, expected_expr, actual_expr, printable(expected), printable(actual));
+}
+
+static std::string build_message(const char* function, const char* expected_expr, const char* actual_expr, int expected, int actual) {
+  return build_message(function, expected_expr, actual_expr, printable(expected), printable(actual));
+}
+
+static std::string build_message(const char* function, const char* expected_expr, const char* actual_expr, char expected, int actual) {
+  return build_message(function, expected_expr, actual_expr, printable(expected), printable(actual));
+}
+
+static std::string build_message(const char* function, const char* expected_expr, const char* actual_expr, char expected, char actual) {
+  return build_message(function, expected_expr, actual_expr, printable(expected), printable(actual));
 }
 
 template< class T1, class T2 >
 static void check_equal(const T1& expected, const T2& actual, const char* function, const char* expected_expr, const char* actual_expr) {
   if (expected != actual) {
-    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << expected << ", was " << actual << std::endl;
-    exit(1);
+    throw assertion_failure(build_message(function, expected_expr, actual_expr, expected, actual).c_str());
   }
-}
-
-static void check_equal(int expected, int actual, const char* function, const char* expected_expr, const char* actual_expr) {
-  if (expected != actual) {
-    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << printable(expected) << ", was " << printable(actual) << std::endl;
-    exit(1);
-  }
-}
-
-static void check_equal(char expected, char actual, const char* function, const char* expected_expr, const char* actual_expr) {
-  check_equal((int)expected, (int)actual, function, expected_expr, actual_expr);
-}
-
-static void check_equal(char expected, int actual, const char* function, const char* expected_expr, const char* actual_expr) {
-  check_equal((int)expected, (int)actual, function, expected_expr, actual_expr);
 }
 
 static void check_equal(const char* expected, const char* actual, const char* function, const char* expected_expr, const char* actual_expr) {
@@ -85,13 +103,11 @@ static void check_equal(const char* expected, const char* actual, const char* fu
     return;
 
   if (expected == NULL || actual == NULL) {
-    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << printable(expected) << ", was " << printable(actual) << std::endl;
-    exit(1);
+    throw assertion_failure(build_message(function, expected_expr, actual_expr, expected, actual).c_str());
   }
 
   if (strcmp(expected, actual)) {
-    std::cout << function << ": assertion (" << expected_expr << " == " << actual_expr << ") failed -- expected " << expected << ", was " << actual << std::endl;
-    exit(1);
+    throw assertion_failure(build_message(function, expected_expr, actual_expr, expected, actual).c_str());
   }
 }
 

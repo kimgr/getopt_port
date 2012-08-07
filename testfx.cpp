@@ -13,10 +13,17 @@ void register_test(const char* name, testfunction f) {
 }
 
 int run_tests() {
+  int failures = 0;
   for (test_vector::const_iterator i = tests().begin(); i != tests().end(); ++i) {
-    std::cout <<  "Running " << i->first << "..." << std::endl;
-    i->second();
+    try {
+      std::cout <<  "Running " << i->first << "..." << std::endl;
+      i->second();
+    }
+    catch (const assertion_failure& failure) {
+      std::cout << failure.what() << std::endl;
+      ++failures;
+    }
   }
 
-  return 0;
+  return failures;
 }
