@@ -235,6 +235,7 @@ TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument) {
 
   assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
   assert_equal((char*)NULL, optarg);
+  assert_equal(2, optind);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_empty_optional_argument) {
@@ -255,7 +256,7 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
   assert_equal('a', getopt(count(argv), argv, "a:"));
   assert_equal("value", optarg);
 
-  ::optind = 1;
+  optind = 1;
 
   // Then make sure that getopt_long() doesn't get that value out
   // when a non-option is processed
@@ -275,7 +276,7 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optopt) {
   assert_equal('?', getopt(count(argv), argv, "a"));
   assert_equal('z', optopt);
 
-  ::optind = 1;
+  optind = 1;
 
   // Then make sure that getopt_long() doesn't get that value out
   // when a non-option is processed
