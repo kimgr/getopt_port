@@ -121,9 +121,9 @@ TEST_F(getopt_fixture, test_getopt_long_flag) {
     null_opt
   };
 
-  assert_equal('2', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('2', getopt_long(count(argv), argv, "12", opts, NULL));
 
-  assert_equal(0, getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal(0, getopt_long(count(argv), argv, "12", opts, NULL));
   assert_equal('1', flag);
 }
 
@@ -136,7 +136,7 @@ TEST_F(getopt_fixture, test_getopt_long_unknown) {
     null_opt
   };
 
-  assert_equal('?', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('?', getopt_long(count(argv), argv, "12", opts, NULL));
   assert_equal(2, optind); // optind should be incremented
 }
 
@@ -148,7 +148,7 @@ TEST_F(getopt_fixture, test_getopt_long_required_argument_same_argv) {
     null_opt
   };
 
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('a', getopt_long(count(argv), argv, "a:", opts, NULL));
   assert_equal("value", optarg);
 }
 
@@ -160,7 +160,7 @@ TEST_F(getopt_fixture, test_getopt_long_required_argument_separate_argv) {
     null_opt
   };
 
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('a', getopt_long(count(argv), argv, "a:", opts, NULL));
   assert_equal("value", optarg);
 }
 
@@ -172,7 +172,7 @@ TEST_F(getopt_fixture, test_getopt_long_missing_required_argument) {
     null_opt
   };
 
-  assert_equal(':', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal(':', getopt_long(count(argv), argv, "a:", opts, NULL));
   assert_equal((char*)NULL, optarg);
   assert_equal(3, optind);  // optind should be incremented past argc looking
                             // for args
@@ -185,7 +185,7 @@ TEST_F(getopt_fixture, test_getopt_long_extraneous_argument) {
   };
 
   char* argv[] = {"foo.exe", "--arg=bar"};
-  assert_equal('?', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('?', getopt_long(count(argv), argv, "a", opts, NULL));
   assert_equal((char*)NULL, optarg);
 }
 
@@ -197,7 +197,7 @@ TEST_F(getopt_fixture, test_getopt_long_empty_required_argument) {
     null_opt
   };
 
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('a', getopt_long(count(argv), argv, "a:", opts, NULL));
   assert_equal("", optarg);
 }
 
@@ -209,7 +209,7 @@ TEST_F(getopt_fixture, test_getopt_long_optional_argument_same_argv) {
     null_opt
   };
 
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('a', getopt_long(count(argv), argv, "a::", opts, NULL));
   assert_equal("value", optarg);
 }
 
@@ -221,7 +221,7 @@ TEST_F(getopt_fixture, test_getopt_long_optional_argument_separate_argv) {
     null_opt
   };
 
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('a', getopt_long(count(argv), argv, "a::", opts, NULL));
   assert_equal((char*)NULL, optarg);
 }
 
@@ -233,7 +233,7 @@ TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument) {
     null_opt
   };
 
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('a', getopt_long(count(argv), argv, "a::", opts, NULL));
   assert_equal((char*)NULL, optarg);
   assert_equal(2, optind);
 }
@@ -246,7 +246,7 @@ TEST_F(getopt_fixture, test_getopt_long_empty_optional_argument) {
     null_opt
   };
 
-  assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
+  assert_equal('a', getopt_long(count(argv), argv, "a::", opts, NULL));
   assert_equal("", optarg);
 }
 
@@ -266,7 +266,7 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
   };
 
   char* long_argv[] = {"foo.exe", "this"};
-  assert_equal(-1, getopt_long(count(long_argv), long_argv, "", opts, NULL));
+  assert_equal(-1, getopt_long(count(long_argv), long_argv, "a::", opts, NULL));
   assert_equal((char*)NULL, optarg);
 }
 
@@ -286,6 +286,6 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optopt) {
   };
 
   char* long_argv[] = {"foo.exe", "--zarg"};
-  assert_equal('?', getopt_long(count(long_argv), long_argv, "", opts, NULL));
+  assert_equal('?', getopt_long(count(long_argv), long_argv, "a", opts, NULL));
   assert_equal(0, optopt);
 }
