@@ -222,7 +222,7 @@ TEST_F(getopt_fixture, test_getopt_long_optional_argument_separate_argv) {
   };
 
   assert_equal('a', getopt_long(count(argv), argv, "", opts, NULL));
-  assert_equal("value", optarg);
+  assert_equal((char*)NULL, optarg);
 }
 
 TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument) {
@@ -255,6 +255,8 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
   assert_equal('a', getopt(count(argv), argv, "a:"));
   assert_equal("value", optarg);
 
+  ::optind = 1;
+
   // Then make sure that getopt_long() doesn't get that value out
   // when a non-option is processed
   option opts[] = {
@@ -265,4 +267,24 @@ TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
   char* long_argv[] = {"foo.exe", "this"};
   assert_equal(-1, getopt_long(count(long_argv), long_argv, "", opts, NULL));
   assert_equal((char*)NULL, optarg);
+}
+
+TEST_F(getopt_fixture, test_getopt_long_resets_optopt) {
+  // First use getopt() to put something into optopt.
+  char* argv[] = {"foo.exe", "-z"};
+  assert_equal('?', getopt(count(argv), argv, "a"));
+  assert_equal('z', optopt);
+
+  ::optind = 1;
+
+  // Then make sure that getopt_long() doesn't get that value out
+  // when a non-option is processed
+  option opts[] = {
+    {"arg", no_argument, NULL, 'a'},
+    null_opt
+  };
+
+  char* long_argv[] = {"foo.exe", "--zarg"};
+  assert_equal('?', getopt_long(count(long_argv), long_argv, "", opts, NULL));
+  assert_equal(0, optopt);
 }
