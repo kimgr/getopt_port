@@ -99,7 +99,7 @@ TEST_F(getopt_fixture, test_getopt_missing_optional_argument) {
 TEST_F(getopt_fixture, test_getopt_optopt) {
   char* argv[] = {"foo.exe", "-a", "-b"};
 
-  getopt(count(argv), argv, "a");
+  assert_equal('a', getopt(count(argv), argv, "a"));
   assert_equal('a', optopt);
 
   assert_equal('?', getopt(count(argv), argv, "a"));
