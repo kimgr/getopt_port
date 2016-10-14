@@ -30,6 +30,11 @@ int getopt(int argc, char* const argv[], const char* optstring) {
   optarg = NULL;
   opterr = 0;
   optopt = 0;
+  
+  /* NULL optstring, it may happen regularly when this function is called
+     from "getopt_long". NULL argv is mostly a bug*/
+  if (optstring == NULL || argv == NULL) 
+    goto no_more_optchars;  
 
   /* Unspecified, but we need it to avoid overrunning the argv bounds. */
   if (optind >= argc)
