@@ -150,10 +150,12 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
   /* It's an option; starts with -- and is longer than two chars. */
   current_argument = argv[optind] + 2;
   argument_name_length = strcspn(current_argument, "=");
-  for (; o->name; ++o) {
-    if (strncmp(o->name, current_argument, argument_name_length) == 0) {
-      match = o;
-      ++num_matches;
+  if (o) {
+    for (; o->name; ++o) {
+      if (strncmp(o->name, current_argument, argument_name_length) == 0) {
+        match = o;
+        ++num_matches;
+      }
     }
   }
 
