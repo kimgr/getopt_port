@@ -141,7 +141,7 @@ int getopt_long(int argc, char* const argv[], const char* optstring,
   optarg = NULL;
   optopt = 0;
 
-  if (optind >= argc)
+  if (optind >= argc || argv == NULL)
     return -1;
 
   if (strlen(argv[optind]) < 3 || strncmp(argv[optind], "--", 2) != 0)
