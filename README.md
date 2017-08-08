@@ -1,8 +1,7 @@
 ﻿getopt_port
 ===========
 
-[Kim Gräsman](http://grundlig.wordpress.com)  
-[@kimgr](http://twitter.com/kimgr)
+Kim Gräsman <kim.grasman@gmail.com>
 
 An original implementation of `getopt` and `getopt_long` with limited GNU extensions. Provided under the BSD license, to allow non-GPL projects to use `getopt`-style command-line parsing.
 
