@@ -1,11 +1,11 @@
-﻿getopt_port
+getopt_port
 ===========
 
-Kim Gräsman <kim.grasman@gmail.com>
+Kim Grasman <kim.grasman@gmail.com>
 
 An original implementation of `getopt` and `getopt_long` with limited GNU extensions. Provided under the BSD license, to allow non-GPL projects to use `getopt`-style command-line parsing.
 
-So far only built with Visual C++, but has no inherently non-portable constructs.
+Built with Visual C++ and Clang on FreeBSD, but has no inherently non-portable constructs.
 
 Intended to be embedded into your code tree -- `getopt.h` and `getopt.c` are self-contained and should work in any context.
 
