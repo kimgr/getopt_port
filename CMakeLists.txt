@@ -9,3 +9,8 @@ add_executable(test_getopt_port
   main.cpp
   testfx.cpp
 )
+
+# Have the tests accept const char* -> char* decay-
+target_compile_options(test_getopt_port
+  PRIVATE
+  "-Wno-c++11-compat-deprecated-writable-strings")
