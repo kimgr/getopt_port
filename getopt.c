@@ -31,10 +31,6 @@
 #include <stddef.h>
 #include <string.h>
 
-const int no_argument = 0;
-const int required_argument = 1;
-const int optional_argument = 2;
-
 char* optarg;
 int optopt;
 /* The variable optind [...] shall be initialized to 1 by the system. */
