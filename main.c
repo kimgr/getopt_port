@@ -26,34 +26,33 @@
  *
  ******************************************************************************/
 
-#ifndef INCLUDED_GETOPT_PORT_H
-#define INCLUDED_GETOPT_PORT_H
+#include <stddef.h>
+#include <assert.h>
+#include "getopt.h"
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+/* Just to test if it compiles as C */
 
-#define no_argument 1
-#define required_argument 2
-#define optional_argument 3
-
-extern char* optarg;
-extern int optind, opterr, optopt;
-
-struct option {
-  const char* name;
-  int has_arg;
-  int* flag;
-  int val;
+struct option opts[] = {
+  {"first", no_argument, 0, 'f'},
+  {"second", required_argument, 0, 's'},
+  {"third", optional_argument, 0, 't'},
+  {0, 0, 0, 0}
 };
 
-int getopt(int argc, char* const argv[], const char* optstring);
+int main(int argc, char* argv[]) {
+  int opt;
 
-int getopt_long(int argc, char* const argv[],
-  const char* optstring, const struct option* longopts, int* longindex);
+  while ((opt = getopt_long(argc, argv, "fs:t::", opts, NULL)) != -1) {
+    switch (opt) {
+      case 'f':
+      case 's':
+      case 't':
+        break;
+      default:
+        assert(0);
+        break;
+      }
+  }
 
-#if defined(__cplusplus)
+  return 0;
 }
-#endif
-
-#endif // INCLUDED_GETOPT_PORT_H

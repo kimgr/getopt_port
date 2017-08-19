@@ -6,3 +6,9 @@ ipch/
 *.suo
 *.vcxproj.filters
 *.vcxproj.user
+CMakeCache.txt
+CMakeFiles
+Makefile
+*.cmake
+test_getopt_port
+test_getopt_port_c

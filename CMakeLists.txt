@@ -10,6 +10,11 @@ add_executable(test_getopt_port
   testfx.cpp
 )
 
+add_executable(test_getopt_port_c
+  getopt.c
+  main.c
+)
+
 # Have the tests accept const char* -> char* decay-
 target_compile_options(test_getopt_port
   PRIVATE
