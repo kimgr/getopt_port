@@ -34,6 +34,7 @@
 #include <string>
 #include <stdexcept>
 #include <stdio.h>
+#include <string.h>
 #include <sstream>
 
 // Test registration
