@@ -11,6 +11,12 @@ add_executable(test_getopt_port
 )
 
 # Have the tests accept const char* -> char* decay-
-target_compile_options(test_getopt_port
-  PRIVATE
-  "-Wno-c++11-compat-deprecated-writable-strings")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  target_compile_options(test_getopt_port
+    PRIVATE
+    "-Wno-c++11-compat-deprecated-writable-strings")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  target_compile_options(test_getopt_port
+    PRIVATE
+    "-Wno-write-strings")
+endif()
