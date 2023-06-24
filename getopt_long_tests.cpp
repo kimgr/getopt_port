@@ -121,6 +121,23 @@ TEST_F(getopt_fixture, test_getopt_long_ambiguous_abbrev) {
   assert_equal('?', (char)getopt_long(count(argv), argv, "15", opts, NULL));
 }
 
+TEST_F(getopt_fixture, test_getopt_long_ambiguous_exact_match) {
+  // Derived from IWYU bug:
+  // https://github.com/include-what-you-use/include-what-you-use/pull/1260
+  char* argv[] = {"foo.exe", "--error"};
+
+  // If there are multiple options that match arguments by abbreviation, make
+  // sure we accept and prefer exact matches.
+  option opts[] = {
+    {"error", optional_argument, NULL, 'e'},
+    {"error_always", optional_argument, NULL, 'a'},
+    null_opt
+  };
+
+  assert_equal('e', (char)getopt_long(count(argv), argv, "e:a", opts, NULL));
+  assert_equal(-1, (char)getopt_long(count(argv), argv, "e:a", opts, NULL));
+}
+
 TEST_F(getopt_fixture, test_getopt_long_longindex) {
   char* argv[] = {"foo.exe", "--second", "--first"};
 
