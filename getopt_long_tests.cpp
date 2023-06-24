@@ -295,6 +295,25 @@ TEST_F(getopt_fixture, test_getopt_long_empty_optional_argument) {
   assert_equal("", optarg);
 }
 
+TEST_F(getopt_fixture, test_getopt_long_missing_optional_argument_more_args) {
+  // Intended to cover https://github.com/kimgr/getopt_port/issues/5.
+  // Does not appear to provoke any strange behavior, so I might be missing
+  // something.
+  char* argv[] = {"foo.exe", "--optional", "--required", "val"};
+
+  option opts[] = {
+    {"optional", optional_argument, NULL, 'o'},
+    {"required", required_argument, NULL, 'r'},
+    null_opt
+  };
+
+  assert_equal('o', (char)getopt_long(count(argv), argv, "o::r:", opts, NULL));
+  assert_equal((char*)NULL, optarg);
+  assert_equal('r', (char)getopt_long(count(argv), argv, "o::r:", opts, NULL));
+  assert_equal("val", optarg);
+  assert_equal(-1, getopt_long(count(argv), argv, "o::r:", opts, NULL));
+}
+
 TEST_F(getopt_fixture, test_getopt_long_resets_optarg) {
   // First use getopt() to put something into optarg.
   char* argv[] = {"foo.exe", "-avalue"};
